@@ -16,15 +16,29 @@ pip install pybind11
 
 ### How to run it :
 
-In your python environnement, in the build directory, run this command to generate the Makefile :
+After activation of your python environnement, create the build directory to run this command in order to generate the Makefile :
 
 ```
 CMAKE_PREFIX_PATH=$(python -c "import streampu; print(streampu.get_cmake_dirs())") cmake ..
 ```
 
+Then
+
+```
+make
+```
+
+And
+
+```
+cp ads_b*.so $(pip show streampu | grep Location | cut -d' ' -f2)
+``` 
+
+
 
 An example of use is shown in the chaine_PM.py file
 
 
-The graph presenting the processing aimed to implement :
+The graph presenting the processing aimed to be implemented :
+
 ![Diagramme](simple_double_voie.svg)
