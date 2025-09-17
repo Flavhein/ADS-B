@@ -30,6 +30,7 @@ using namespace py::literals;
 // Create a	python module using PYBIND11
 PYBIND11_MODULE(ads_b, m)
 {
+    spu::tools::Buffer_allocator::set_task_autoalloc(true);
     auto pyspu_stateful = (py::object)py::module_::import("streampu").attr("Stateful");
 
     py::class_<RecepteurPM, spu::module::Stateful>(m, "RecepteurPM")
