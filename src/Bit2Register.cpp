@@ -82,6 +82,7 @@ void Bit2Register::process(double * input,
     *format = bin2dec(formatBits);
     bin2hex(adresseBits, adresse);
     *type = bin2dec(typeBits);
+    //std::cout << adresse << std::endl;
 
     if ((*type >= 9 && *type <= 18) || (*type >= 20 && *type <= 22)) {
         auto altitudeBits = getRange(vectbin, 40, 47);

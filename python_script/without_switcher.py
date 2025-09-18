@@ -7,7 +7,7 @@ import streampu as spu
 # Parameters
 
 Fse     = 4
-seuil   = 0.7
+seuil   = 0.8
 v0      = 0.5
 
 part11_00     = [1.0,1.0,0.0,0.0]
