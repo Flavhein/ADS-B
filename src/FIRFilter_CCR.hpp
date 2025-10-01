@@ -15,7 +15,7 @@ protected:
 
 public:
 
-    FIRFilter(const int n_elmts,const std::vector<double>& b, int size_b);
+    FIRFilter(const int n_elmts,const std::vector<double>& b);
     virtual ~FIRFilter() = default;
     void process(const double* input, double* output);
     inline void step(const double* x_elt, double* y_elt);
@@ -25,7 +25,7 @@ private:
     std::vector<double> b;
     std::vector<double> buffer;
     int head;
-    int size_b;
+    int size;
     int M;
     int P;
 
@@ -34,14 +34,14 @@ private:
 void FIRFilter::step(const double* x_elt, double* y_elt)
 {
 	this->buffer[this->head] = *x_elt;
-	this->buffer[this->head + this->size_b] = *x_elt;
+	this->buffer[this->head + this->size] = *x_elt;
 
 	*y_elt = this->buffer[this->head+1] * this->b[0];
-	for (auto i = 1; i < this->size_b ; i++)
+	for (auto i = 1; i < this->size ; i++)
 		*y_elt += this->buffer[this->head + 1 + i] * this->b[i];
 
 	this->head++;
-	this->head %= this->size_b;
+	this->head %= this->size;
 }
 
 

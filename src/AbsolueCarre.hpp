@@ -9,9 +9,12 @@ protected:
 
 public:
 
-AbsolueCarre(const int n_elmts);
+AbsolueCarre(const int n_elmts,int isComplex);
     virtual ~AbsolueCarre() = default;
     void process(const double* input, double* output);
+
+private:
+    int isComplex;
 
 };
 

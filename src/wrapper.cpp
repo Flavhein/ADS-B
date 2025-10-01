@@ -4,7 +4,7 @@
 #include "DetectCRC.hpp"
 #include "Bit2Register.hpp"
 #include "Decimation_PM.hpp"
-#include "FIRFilter.hpp"
+#include "FIRFilter_CCR.hpp"
 #include "AbsolueCarre.hpp"
 #include "Decision_PM.hpp"
 #include "CorrSelect.hpp"
@@ -16,6 +16,7 @@
 #include "SelectMax.hpp"
 #include "Norme2.hpp"
 #include "Select.hpp"
+#include "Filter_RRR.hpp"
 
 #include <pybind11/pybind11.h>
 #include <streampu.hpp>
@@ -68,10 +69,10 @@ PYBIND11_MODULE(ads_b, m)
         .def(py::init<const int, int>(), "n_elmts"_a, "isComplex"_a);
 
     py::class_<FIRFilter, spu::module::Stateful>(m, "FIRFilter")
-        .def(py::init<const int, const std::vector<double>&, int>(), "n_elmts"_a, "b"_a, "size_b"_a);
+        .def(py::init<const int, const std::vector<double>&>(), "n_elmts"_a, "b"_a);
 
     py::class_<AbsolueCarre, spu::module::Stateful>(m, "AbsolueCarre")
-        .def(py::init<const int>(), "n_elmts"_a);
+        .def(py::init<const int,int>(), "n_elmts"_a, "isComplex"_a);
 
     py::class_<DecisionPM, spu::module::Stateful>(m, "DecisionPM")
         .def(py::init<const int, double>(), "n_elmts"_a, "v0"_a);
@@ -102,5 +103,8 @@ PYBIND11_MODULE(ads_b, m)
 
     py::class_<Select, spu::module::Stateful>(m, "Select")
         .def(py::init<const int, double>(), "n_elmts"_a, "energie_preamb"_a);
+
+    py::class_<Filter_RRR, spu::module::Stateful>(m, "Filter_RRR")
+        .def(py::init<const int, std::vector<double>&>(), "n_elmts"_a, "h"_a);
 
 }

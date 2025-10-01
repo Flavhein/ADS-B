@@ -42,7 +42,7 @@ Extract::Extract(const int n_elmts, const int Fse, const double seuil)
 }
 
 void Extract::process(const int* decalage, const double* max, double* sigs, double* tram) {
-    int voie_sig =  decalage[0] % (this->Fse /2);
+    int voie_sig =  (decalage[0]) % (this->Fse /2); // egual à 0 ou 1 (car échantillonnage à Ts/2)
 
     if (size_buffer > 0 and voie != -1){
         for (int j=0; j< size_buffer; j++){
@@ -50,22 +50,17 @@ void Extract::process(const int* decalage, const double* max, double* sigs, doub
         }
 
         for (int i=0; i <(224-size_buffer); i++){
-            tram[size_buffer+i]=sigs[i*(Fse/2)+voie];
+            tram[size_buffer+i]=sigs[i*(Fse/2)+voie]; //voie ou voie_sig
         }
     }
 
     if (max[0] > seuil){
-        if(decalage[0]<8){
-            for (int t=0; t< 224; t++){
-                tram[t]=sigs[decalage[0] + (t*(Fse/2)+voie_sig)];
-            }
-        } else {
-            size_buffer = 224-decalage[0];
-            voie = voie_sig;
-            for (int k=0; k< size_buffer; k++){
-                buffer[k]=sigs[decalage[0] + (k*(Fse/2)+voie_sig)];
-            }
+        size_buffer = 224-decalage[0];
+        voie = voie_sig;
+        for (int k=0; k< size_buffer; k++){
+            buffer[k]=sigs[decalage[0] + (k*(Fse/2)+voie_sig)];
         }
+
     } else{
         size_buffer=0;
         voie=-1;

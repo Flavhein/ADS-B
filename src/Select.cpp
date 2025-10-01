@@ -44,7 +44,7 @@ void Select::process(const double* num, const double* denum, int* decalage, doub
     decalage[0]=0;
 
     for (int i=0; i<n_elmts; i++){
-        if (denum[i]==0){
+        if (denum[i]==0){ //attention <0 ?
             intercorr[i]=0.0;
         } else {
             intercorr[i]=num[i]/(denum[i]*this->energie_preamb);
@@ -53,8 +53,10 @@ void Select::process(const double* num, const double* denum, int* decalage, doub
                 decalage[0]=i;
             }
         }
-        //std::cerr<<"i : "<<i<<" | intercorr "<<intercorr[i]<<" | denominateur "<<denum[i]<<std::endl;
     }
+
+    //std::cout<<std::endl;
+
     //double* p_max = std::max_element(intercorr, intercorr + n_elmts);
     //decalage[0] = (p_max - intercorr);
     //max[0] = *p_max;

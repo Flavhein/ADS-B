@@ -1,16 +1,17 @@
 #include "AbsolueCarre.hpp"
 
 
-AbsolueCarre::AbsolueCarre(const int n_elmts)
+AbsolueCarre::AbsolueCarre(const int n_elmts, int isComplex) //isCompelx == 1 yes, isComplex = 0 no
     : Stateful()
-    , n_elmts(n_elmts) {
+    , n_elmts(n_elmts)
+    , isComplex(isComplex) {
 
     const std::string name = "AbsolueCarre";
     this->set_name(name);
 
     auto& p = this->create_task("process");                                                  // Create the task
     size_t ps_input = this->template create_socket_in<double>(p, "input", this->n_elmts);    // Create the input socket
-    size_t ps_output = this->template create_socket_out<double>(p, "output", this->n_elmts /2);   // Create the output socket
+    size_t ps_output = this->template create_socket_out<double>(p, "output", this->n_elmts / (1+isComplex));   // Create the output socket
 
     // create the codelet
     this->create_codelet(
@@ -29,7 +30,13 @@ AbsolueCarre::AbsolueCarre(const int n_elmts)
 }
 
 void AbsolueCarre::process(const double* input, double* output) {
-    for (size_t i = 0; i < n_elmts/2; ++i) {
-        output[i]=(input[i*2]*input[i*2])+(input[i*2 +1]*input[i*2 +1]);
+    if (isComplex == 1) {
+        for (size_t i = 0; i < n_elmts/2; ++i) {
+            output[i]=(input[i*2]*input[i*2])+(input[i*2 +1]*input[i*2 +1]);
+        }
+    } else {
+        for (size_t i = 0; i < n_elmts; ++i) {
+            output[i]=(input[i]*input[i]);
+        }
     }
 }

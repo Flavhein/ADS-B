@@ -3,7 +3,6 @@ sys.path.insert(0, "../build/")
 import ads_b
 import numpy as np
 import streampu as spu
-import pdb
 
 n_elmts = 8
 
@@ -14,8 +13,6 @@ def chaine_PM():
     emit=ads_b.EmetteurPM(n_elmts,Fe,Ts)
 
     entre = spu.array([0.0,1.0,0.0,0.0,1.0,1.0,1.0,0.0], dtype=spu.float64)
-
-    pdb.set_trace()
 
     yl = emit.process(entre)
     print(f" entre : {entre}")

@@ -21,8 +21,8 @@ print(f"energie_preamb : {energie_preamb}")
 
 src=spu.source_user(960,"../Source_User.txt",auto_reset=False,dtype=spu.float64)
 
-square_g    = ads_b.AbsolueCarre(960)
-square_d    = ads_b.AbsolueCarre(960)
+square_g    = ads_b.AbsolueCarre(960,1)
+square_d    = ads_b.AbsolueCarre(960,1)
 
 porte_F2    = ads_b.FIRFilter(960,[1.0,0.0,1.0,0.0],4)
 

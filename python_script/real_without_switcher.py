@@ -7,7 +7,7 @@ import streampu as spu
 # Parameters
 
 Fse     = 4
-seuil   = 0.8
+seuil   = 0.7
 v0      = 0.5
 
 part11_00     = [1.0,1.0,0.0,0.0]
@@ -21,25 +21,18 @@ print(f"energie_preamb : {energie_preamb}")
 
 src=spu.source_user(960,"../Source_User.txt",auto_reset=False,dtype=spu.float64)
 
-square_g    = ads_b.AbsolueCarre(960,1)
-square_d    = ads_b.AbsolueCarre(960,1)
+norme       = ads_b.Norme2(960)
+square_g    = ads_b.AbsolueCarre(480,0)
+square_d    = ads_b.AbsolueCarre(480,0)
 
-porte_F2    = ads_b.FIRFilter(960,[1.0,0.0,1.0,0.0])
+porte_F2    = ads_b.Filter_RRR(480,[1.0,1.0])
 
 array_32    = np.ones(32,dtype=np.float64)
-porte_32    = ads_b.FIRFilter(480,array_32)
+porte_32    = ads_b.Filter_RRR(480,array_32)
 
-part1_0     = [1.0,0.0,0.0,0.0]
-part0_1     = [0.0,0.0,1.0,0.0]
-#part1_0     = [1.0,1.0,0.0,0.0]
-#part0_1     = [0.0,0.0,1.0,1.0]
-preamb_array_reel=  np.concatenate([part1_0,part1_0,part0_0,part0_1,part0_1,part0_0,part0_0,part0_0])
-preamb_array = np.empty(len(preamb_array_reel) * 2)
-preamb_array[::2] = preamb_array_reel
-preamb_array[1::2] = 0.0 #this signal is complex [reel, imag ...]
-porte_preamb= ads_b.FIRFilter(960,preamb_array)
 
-norme       = ads_b.Norme2(960)
+porte_preamb= ads_b.Filter_RRR(480,preambule)
+
 
 selector    = ads_b.Select(480, energie_preamb)
 extrait     = ads_b.Extract(480,Fse,seuil)
@@ -49,27 +42,26 @@ detect      = ads_b.DetectCRC(112)
 
 convert     = ads_b.Bit2Register(112)
 
+
 # Process
 
 frame, _ = src.generate()  # Ça exécute la tâche en plus d'un binding éventuel
-sig_reel = square_g.process(frame)
-denum       = porte_32.process(sig_reel)
+sig_reel = norme(frame)
 
-use_sig     = porte_F2.process(src.generate.out_data)
+sig_reel_carre = square_g(sig_reel)
+print(len(sig_reel_carre))
+denum       = porte_32.process(sig_reel_carre)
+
+use_sig     = porte_F2.process(sig_reel)
 pre_num     = porte_preamb.process(use_sig)
-#porte_preamb.process.debug = True
-num         = square_d.process(pre_num)
+num         = square_d(pre_num)
 
 decalage,max,_   = selector.process(num,denum)
-#selector.process.debug = True
 
-sig_norme   = norme.process(use_sig)
-
-tram        = extrait.process(decalage,max,sig_norme)
+tram        = extrait.process(decalage,max,use_sig)
 
 bits = decid.process(tram)
 isClear = detect.process(bits)
-print(f" isClear = {isClear}")
 
 # Affichage
 
