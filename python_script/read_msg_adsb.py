@@ -99,14 +99,14 @@ sanszerolong = coord[1, :] != 0
 print("long",coord[1, sanszerolong])
 print("lat",coord[0, sanszerolat])
 
-#plt.figure()
-#plt.imshow(plt.imread('fond.png'), extent=[REF_LON-2, REF_LON+2, REF_LAT-2, REF_LAT+2])
+plt.figure()
+plt.imshow(plt.imread('fond.png'), extent=[REF_LON-2, REF_LON+2, REF_LAT-2, REF_LAT+2])
 affiche_carte(REF_LON=REF_LON,REF_LAT=REF_LAT)
-plt.plot(coord[1, sanszerolat]+8,coord[0, sanszerolong], '--o', markerfacecolor='blue')
+#plt.plot(coord[1, sanszerolat]+8,coord[0, sanszerolong], '--o', markerfacecolor='blue')
 #plt.xlabel('Longitude')
 #plt.ylabel('Latitude')
 #plt.title('Carte des positions ADS-B')
-plt.savefig('../carte_positions.png')
+#plt.savefig('../carte_positions.png')
 #plt.show()
 
 seq = spu.Sequence(input.task)

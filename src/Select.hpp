@@ -11,7 +11,7 @@ public:
 
     Select(const int n_elmts, double energie_preamb);
     virtual ~Select() = default;
-    void process(const double* num, const double* denum, int* decalage, double* max, double* intercorr);
+    void process(const double* num, const double* denum, int* decalage, double* max, double* result);
 
 private:
     double energie_preamb;
